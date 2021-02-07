@@ -26,20 +26,20 @@ func main() {
 	addr := flag.String("addr", ":4000", "HTTP network address")
 
 	secret := flag.String("secret", "s6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@ge", "Secret key")
-	flag.Parse()
+	//flag.Parse()
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	username := flag.String("username", "postgres", "username")
 	password := flag.String("password", "650464", "password")
-	host := flag.String("host", "localhost", "host")
+	host := flag.String("host", "host.docker.internal", "host")
 	port := flag.String("port", "5432", "port")
 	dbname := flag.String("dbname", "snippetbox", "dbname")
 	connString := fmt.Sprintf("postgres://%v:%v@%v:%v/%v", *username, *password, *host, *port, *dbname)
 	dsn := flag.String("dsn", connString, "PostgreSQL data source name")
 	conn, err := pgxpool.Connect(context.Background(), *dsn)
-
+	flag.Parse()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)

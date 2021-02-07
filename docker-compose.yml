@@ -1,20 +1,22 @@
-version: '3'
+version: '3.8'
+
 services:
-  db:
+ app:
+   build: ./
+   command: ./app
+   ports:
+     - 4000:4000
+   depends_on:
+     - db
+   environment:
+     - DB_PASSWORD=650454
+
+ db:
+    restart: always
     image: postgres:latest
-    environment:
-      POSTGRES_DB: snippetbox
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 650464
-      ports: 5432:5432
-  app:
-    build: .
-    command: ["./wait-for-it.sh", "db:5432", "--", "go", "run", "./cmd/web"]
     volumes:
-      - .:/go/src/app
+    - ./.database/postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=650464
     ports:
-      - "4000:4000"
-    depends_on:
-      - db
-    links:
-      - db
+      - 5432:5432
